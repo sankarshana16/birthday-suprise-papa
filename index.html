@@ -5,94 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Birthday Challenge</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background-color: #fff0f6; color: #4a4a4a; }
-        .container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; max-width: 400px; width: 90%; }
-        h1 { color: #d63384; margin-bottom: 10px; }
-        .progress { font-size: 0.9rem; color: #888; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        input { padding: 12px; border-radius: 8px; border: 2px solid #ffd1dc; margin-bottom: 15px; width: 80%; outline: none; }
-        input:focus { border-color: #ff69b4; }
-        button { padding: 12px 25px; background-color: #ff69b4; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background-color: #d63384; transform: scale(1.05); }
-        #message { margin-top: 15px; min-height: 20px; font-weight: bold; }
-    </style>
-</head>
-<body>
+        /* Modern CSS reset for layout */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-<div class="container">
-    <div class="progress" id="stepIndicator">Question 1 of 3</div>
-    <h1 id="questionTitle">Joke #1</h1>
-    <p id="questionText">Computer ko thand lag jaye toh kya karta hai??</p>
-    
-    <input type="text" id="answerInput" placeholder="Your answer..." autocomplete="off">
-    <br>
-    <button onclick="checkAnswer()" id="btnAction">Next →</button>
-    
-    <p id="message"></p>
-</div>
-
-<script>
-    let currentStep = 1;
-
-    // --- CONFIGURATION: Change your questions and answers here ---
-    const challenge = [
-        { 
-            q: "Computer ko thand lag jaye toh kya karta hai??", 
-            a: "windows band kar leta hai" // Always use lowercase for the answer
-        },
-        { 
-            q: "What can you only use when it breaks?", 
-            a: "eggs" 
-        },
-        { 
-            q: "What can you hold in your right hand, but not in your left hand?", 
-            a: "your left hand" 
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            padding: 50px 20px; 
+            background-color: #000000; /* BLACK BACKGROUND */
+            color: #ffcccc;           /* Light, muted red for secondary text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-    ];
 
-    const pdfUrl = "papa_comic_merged_final.pdf"; // The name of your PDF file on GitHub
-
-    function checkAnswer() {
-        const userInput = document.getElementById('answerInput').value.toLowerCase().trim();
-        const msg = document.getElementById('message');
-        const index = currentStep - 1;
-
-        if (userInput === challenge[index].a) {
-            if (currentStep < 3) {
-                // Advance to next question
-                currentStep++;
-                msg.style.color = "green";
-                msg.innerHTML = "Correct! 🎂";
-                
-                // Update UI for next step
-                setTimeout(() => {
-                    document.getElementById('stepIndicator').innerHTML = `Question ${currentStep} of 3`;
-                    document.getElementById('questionTitle').innerHTML = "Next Challenge";
-                    document.getElementById('questionText').innerHTML = challenge[currentStep-1].q;
-                    document.getElementById('answerInput').value = "";
-                    msg.innerHTML = "";
-                    if(currentStep === 3) document.getElementById('btnAction').innerHTML = "Unlock Gift 🎁";
-                }, 800);
-            } else {
-                // Final Step Success
-                msg.style.color = "green";
-                msg.innerHTML = "Success! Opening your gift...";
-                setTimeout(() => {
-                    window.location.href = pdfUrl;
-                }, 1000);
-            }
-        } else {
-            msg.style.color = "red";
-            msg.innerHTML = "Not quite! Try again. 🤔";
+        .container { 
+            background: #111111; /* Slightly lighter black/dark grey for the card */
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15); /* Soft RED shadow for depth */
+            display: inline-block; 
+            max-width: 400px; 
+            width: 100%; 
+            border: 1px solid #333; /* Subtle border to define the card */
         }
-    }
 
-    // Allow "Enter" key to submit
-    document.getElementById("answerInput").addEventListener("keyup", function(event) {
-        if (event.key === "Enter") {
-            checkAnswer();
+        /* BRIGHT RED for the main question title and step count */
+        h1 { 
+            color: #ff3333; /* Bright, vibrant red */
+            margin-bottom: 10px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-    });
-</script>
 
-</body>
-</html>
+        p#questionText {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #ffcccc; /* Soft red for the actual question */
+        }
+
+        .progress { 
+            font-size: 0.9rem; 
+            color: #ff0000; /* Pure red for the step counter */
+            margin-bottom: 20px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: bold;
+        }
+
+        input { 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            border: 2px solid #ff0000; /* RED BORDER for the input */
+            margin-bottom: 15px; 
+            width: 100%; 
+            outline: none; 
+            background-color: #000000; /* Black background inside the input */
