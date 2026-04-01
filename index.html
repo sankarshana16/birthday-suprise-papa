@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Birthday Challenge</title>
     <style>
-        /* Modern Dark Theme with Red Accents */
+        /* Dark Theme Styling */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             text-align: center; 
-            padding: 50px; 
-            background-color: #000000; /* Deep Black Background */
-            color: #ff3333;           /* Primary Red Text */
+            padding: 20px; 
+            background-color: #000000; 
+            color: #ff3333; 
             margin: 0;
             display: flex;
             justify-content: center;
@@ -20,33 +20,24 @@
         }
 
         .container { 
-            background: #111111;      /* Dark Grey Card */
+            background: #111111; 
             padding: 40px; 
             border-radius: 20px; 
-            border: 2px solid #ff0000; /* Bright Red Border */
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); /* Red Glow */
+            border: 2px solid #ff0000; 
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); 
             max-width: 450px; 
             width: 90%; 
         }
 
-        h1 { 
-            color: #ff0000; 
-            margin-bottom: 10px; 
-            text-transform: uppercase;
-        }
-
+        h1 { color: #ff0000; margin-bottom: 15px; text-transform: uppercase; }
+        p { color: #ffffff; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; }
+        
         .progress { 
             font-size: 0.9rem; 
-            color: #bb0000; /* Darker Red for progress */
+            color: #bb0000; 
             margin-bottom: 20px; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
-        }
-
-        #questionText {
-            color: #ffffff; /* White for the question so it's readable */
-            font-size: 1.2rem;
-            margin-bottom: 20px;
         }
 
         input { 
@@ -56,19 +47,14 @@
             background-color: #000; 
             color: #fff; 
             margin-bottom: 15px; 
-            width: 80%; 
+            width: 85%; 
             outline: none; 
             font-size: 1rem;
             text-align: center;
         }
 
-        input:focus { 
-            border-color: #ff6666;
-            box-shadow: 0 0 10px #ff0000;
-        }
-
         button { 
-            padding: 12px 25px; 
+            padding: 15px 30px; 
             background-color: #ff0000; 
             color: white; 
             border: none; 
@@ -77,32 +63,36 @@
             font-weight: bold; 
             text-transform: uppercase;
             transition: 0.3s; 
+            font-size: 1rem;
         }
 
-        button:hover { 
-            background-color: #bb0000; 
-            transform: scale(1.05); 
-        }
+        button:hover { background-color: #bb0000; transform: scale(1.05); }
 
-        #message { 
-            margin-top: 15px; 
-            min-height: 20px; 
-            font-weight: bold; 
-        }
+        #message { margin-top: 15px; font-weight: bold; min-height: 24px; }
+
+        /* Hiding the question area initially */
+        #quiz-area { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="progress" id="stepIndicator">Question 1 of 3</div>
-    <h1 id="questionTitle">Joke #1</h1>
-    <p id="questionText">Computer ko thand lag jaye toh kya karta hai??</p>
-    
-    <input type="text" id="answerInput" placeholder="Enter answer..." autocomplete="off">
-    <br>
-    <button onclick="checkAnswer()" id="btnAction">Next →</button>
-    
-    <p id="message"></p>
+    <div id="start-screen">
+        <h1>Happy Birthday! 🎂</h1>
+        <p>I have a special gift for you, but you have to prove you're worthy. Solve these 3 "Papa Jokes" to unlock your surprise!</p>
+        <button onclick="startQuiz()">Start Challenge</button>
+    </div>
+
+    <div id="quiz-area">
+        <div class="progress" id="stepIndicator">Question 1 of 3</div>
+        <h1 id="questionTitle">Joke #1</h1>
+        <p id="questionText">Computer ko thand lag jaye toh kya karta hai??</p>
+        
+        <input type="text" id="answerInput" placeholder="Enter answer..." autocomplete="off">
+        <br>
+        <button onclick="checkAnswer()" id="btnAction">Next →</button>
+        <p id="message"></p>
+    </div>
 </div>
 
 <script>
@@ -125,6 +115,12 @@
 
     const pdfUrl = "papa_comic_merged_final.pdf"; 
 
+    // Function to switch from Landing Page to Quiz
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-area').style.display = 'block';
+    }
+
     function checkAnswer() {
         const userInput = document.getElementById('answerInput').value.toLowerCase().trim();
         const msg = document.getElementById('message');
@@ -133,7 +129,7 @@
         if (userInput === challenge[index].a) {
             if (currentStep < 3) {
                 currentStep++;
-                msg.style.color = "#00ff00"; // Green for success
+                msg.style.color = "#00ff00"; 
                 msg.innerHTML = "Correct! 🎂";
                 
                 setTimeout(() => {
@@ -152,14 +148,20 @@
                 }, 1000);
             }
         } else {
-            msg.style.color = "#ff3333"; // Red for error
+            msg.style.color = "#ff3333";
             msg.innerHTML = "Not quite! Try again. 🤔";
         }
     }
 
-    document.getElementById("answerInput").addEventListener("keyup", function(event) {
+    // Allow "Enter" key to submit
+    document.addEventListener("keyup", function(event) {
         if (event.key === "Enter") {
-            checkAnswer();
+            // Check which section is visible to decide what Enter does
+            if (document.getElementById('start-screen').style.display !== 'none') {
+                startQuiz();
+            } else {
+                checkAnswer();
+            }
         }
     });
 </script>
