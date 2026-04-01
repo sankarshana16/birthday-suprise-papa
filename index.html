@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Birthday Challenge</title>
     <style>
-        /* Modern CSS reset for layout */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
+        /* Modern Dark Theme with Red Accents */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             text-align: center; 
-            padding: 50px 20px; 
-            background-color: #000000; /* BLACK BACKGROUND */
-            color: #ffcccc;           /* Light, muted red for secondary text */
+            padding: 50px; 
+            background-color: #000000; /* Deep Black Background */
+            color: #ff3333;           /* Primary Red Text */
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -21,44 +20,149 @@
         }
 
         .container { 
-            background: #111111; /* Slightly lighter black/dark grey for the card */
+            background: #111111;      /* Dark Grey Card */
             padding: 40px; 
             border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.15); /* Soft RED shadow for depth */
-            display: inline-block; 
-            max-width: 400px; 
-            width: 100%; 
-            border: 1px solid #333; /* Subtle border to define the card */
+            border: 2px solid #ff0000; /* Bright Red Border */
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); /* Red Glow */
+            max-width: 450px; 
+            width: 90%; 
         }
 
-        /* BRIGHT RED for the main question title and step count */
         h1 { 
-            color: #ff3333; /* Bright, vibrant red */
+            color: #ff0000; 
             margin-bottom: 10px; 
             text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        p#questionText {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            color: #ffcccc; /* Soft red for the actual question */
         }
 
         .progress { 
             font-size: 0.9rem; 
-            color: #ff0000; /* Pure red for the step counter */
+            color: #bb0000; /* Darker Red for progress */
             margin-bottom: 20px; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
-            font-weight: bold;
+        }
+
+        #questionText {
+            color: #ffffff; /* White for the question so it's readable */
+            font-size: 1.2rem;
+            margin-bottom: 20px;
         }
 
         input { 
-            padding: 12px 15px; 
+            padding: 12px; 
             border-radius: 8px; 
-            border: 2px solid #ff0000; /* RED BORDER for the input */
+            border: 1px solid #ff0000; 
+            background-color: #000; 
+            color: #fff; 
             margin-bottom: 15px; 
-            width: 100%; 
+            width: 80%; 
             outline: none; 
-            background-color: #000000; /* Black background inside the input */
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        input:focus { 
+            border-color: #ff6666;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        button { 
+            padding: 12px 25px; 
+            background-color: #ff0000; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            transition: 0.3s; 
+        }
+
+        button:hover { 
+            background-color: #bb0000; 
+            transform: scale(1.05); 
+        }
+
+        #message { 
+            margin-top: 15px; 
+            min-height: 20px; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="progress" id="stepIndicator">Question 1 of 3</div>
+    <h1 id="questionTitle">Joke #1</h1>
+    <p id="questionText">Computer ko thand lag jaye toh kya karta hai??</p>
+    
+    <input type="text" id="answerInput" placeholder="Enter answer..." autocomplete="off">
+    <br>
+    <button onclick="checkAnswer()" id="btnAction">Next →</button>
+    
+    <p id="message"></p>
+</div>
+
+<script>
+    let currentStep = 1;
+
+    const challenge = [
+        { 
+            q: "Computer ko thand lag jaye toh kya karta hai??", 
+            a: "windows band kar leta hai" 
+        },
+        { 
+            q: "What can you only use when it breaks?", 
+            a: "eggs" 
+        },
+        { 
+            q: "What can you hold in your right hand, but not in your left hand?", 
+            a: "your left hand" 
+        }
+    ];
+
+    const pdfUrl = "papa_comic_merged_final.pdf"; 
+
+    function checkAnswer() {
+        const userInput = document.getElementById('answerInput').value.toLowerCase().trim();
+        const msg = document.getElementById('message');
+        const index = currentStep - 1;
+
+        if (userInput === challenge[index].a) {
+            if (currentStep < 3) {
+                currentStep++;
+                msg.style.color = "#00ff00"; // Green for success
+                msg.innerHTML = "Correct! 🎂";
+                
+                setTimeout(() => {
+                    document.getElementById('stepIndicator').innerHTML = `Question ${currentStep} of 3`;
+                    document.getElementById('questionTitle').innerHTML = `Joke #${currentStep}`;
+                    document.getElementById('questionText').innerHTML = challenge[currentStep-1].q;
+                    document.getElementById('answerInput').value = "";
+                    msg.innerHTML = "";
+                    if(currentStep === 3) document.getElementById('btnAction').innerHTML = "Unlock Gift 🎁";
+                }, 800);
+            } else {
+                msg.style.color = "#00ff00";
+                msg.innerHTML = "Success! Opening your gift...";
+                setTimeout(() => {
+                    window.location.href = pdfUrl;
+                }, 1000);
+            }
+        } else {
+            msg.style.color = "#ff3333"; // Red for error
+            msg.innerHTML = "Not quite! Try again. 🤔";
+        }
+    }
+
+    document.getElementById("answerInput").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            checkAnswer();
+        }
+    });
+</script>
+
+</body>
+</html>
