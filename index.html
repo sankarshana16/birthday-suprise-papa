@@ -5,90 +5,280 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Birthday Challenge</title>
     <style>
-        /* Dark Theme Styling */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            text-align: center; 
-            padding: 20px; 
-            background-color: #000000; 
-            color: #ff3333; 
-            margin: 0;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #0d0221 0%, #1a0533 50%, #0d0221 100%);
+            color: #fff;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            position: relative;
         }
 
-        .container { 
-            background: #111111; 
-            padding: 40px; 
-            border-radius: 20px; 
-            border: 2px solid #ff0000; 
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); 
-            max-width: 450px; 
-            width: 90%; 
+        /* Animated Background Particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
         }
 
-        h1 { color: #ff0000; margin-bottom: 15px; text-transform: uppercase; }
-        p { color: #ffffff; font-size: 1.1rem; margin-bottom: 25px; line-height: 1.5; }
-        
-        .progress { 
-            font-size: 0.9rem; 
-            color: #bb0000; 
-            margin-bottom: 20px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(50px); opacity: 0.8; }
         }
 
-        input { 
-            padding: 12px; 
-            border-radius: 8px; 
-            border: 1px solid #ff0000; 
-            background-color: #000; 
-            color: #fff; 
-            margin-bottom: 15px; 
-            width: 85%; 
-            outline: none; 
-            font-size: 1rem;
-            text-align: center;
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(177, 133, 219, 0.2), 0 0 25px rgba(238, 66, 102, 0.1); }
+            50% { box-shadow: 0 0 20px rgba(177, 133, 219, 0.3), 0 0 35px rgba(238, 66, 102, 0.2); }
         }
 
-        button { 
-            padding: 15px 30px; 
-            background-color: #ff0000; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: bold; 
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .container {
+            background: rgba(13, 2, 33, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            max-width: 550px;
+            width: 90%;
+            z-index: 10;
+            animation: glow-pulse 5s ease-in-out infinite;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #b185db, #ee4266, #ffd23f, #b185db);
+            background-size: 300% 300%;
+            animation: gradient-rotate 8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradient-rotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            color: #FFFFFF;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            transition: 0.3s; 
-            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            animation: slide-in 0.6s ease-out;
+            text-shadow: 0 0 15px rgba(177, 133, 219, 0.6), 0 0 30px rgba(238, 66, 102, 0.4), 0 4px 8px rgba(0, 0, 0, 0.8);
         }
 
-        button:hover { background-color: #bb0000; transform: scale(1.05); }
+        p {
+            color: #ffffff;
+            font-size: 1.15rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            animation: slide-in 0.8s ease-out;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+            font-weight: 400;
+        }
 
-        #message { margin-top: 15px; font-weight: bold; min-height: 24px; }
+        .progress {
+            font-size: 1rem;
+            color: #FFFFFF;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            animation: slide-in 0.4s ease-out;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 0 10px rgba(177, 133, 219, 0.3);
+        }
 
-        /* Hiding the question area initially */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ee4266, #ffd23f);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(238, 66, 102, 0.4);
+        }
+
+        input {
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid #b185db;
+            background: rgba(13, 2, 33, 0.7);
+            color: #FFFFFF;
+            margin-bottom: 25px;
+            width: 90%;
+            outline: none;
+            font-size: 1.15rem;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            transition: all 0.3s;
+            animation: slide-in 1s ease-out;
+        }
+
+        input:focus {
+            border-color: #ffd23f;
+            box-shadow: 0 0 15px rgba(255, 210, 63, 0.3);
+            transform: scale(1.02);
+            background: rgba(26, 5, 51, 0.9);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        button {
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #ffd23f, #ee4266);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.4s;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+            animation: slide-in 1.2s ease-out;
+            box-shadow: 0 5px 15px rgba(238, 66, 102, 0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 210, 63, 0.4);
+            background: linear-gradient(135deg, #ee4266, #b185db);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: 600;
+            min-height: 30px;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .correct { animation: celebrate 0.5s ease-out; }
+        .wrong { animation: shake 0.4s ease-out; }
+
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3) rotate(5deg); }
+            100% { transform: scale(1); }
+        }
+
         #quiz-area { display: none; }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd23f;
+            animation: confetti-fall 3s linear forwards;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .emoji-float {
+            position: absolute;
+            font-size: 3rem;
+            animation: emoji-rise 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes emoji-rise {
+            to {
+                transform: translateY(-200px);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="start-screen">
-        <h1>Happy Birthday! 🎂</h1>
-        <p>We have a special gift for you, but you have to prove you're worthy. Solve these 3 "Papa Jokes" to unlock your surprise!</p>
-        <button onclick="startQuiz()">Start Challenge</button>
+        <h1>🎂 Birthday Challenge 🎂</h1>
+        <p>A special gift awaits, but first... prove you're worthy by solving these 3 legendary Papa Jokes!</p>
+        <button onclick="startQuiz()">⚡ Start Challenge ⚡</button>
     </div>
 
     <div id="quiz-area">
         <div class="progress" id="stepIndicator">Question 1 of 3</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+        </div>
         <h1 id="questionTitle">Joke #1</h1>
         <p id="questionText">Computer ko thand lag jaye toh kya karta hai??</p>
-        
-        <input type="text" id="answerInput" placeholder="Enter answer..." autocomplete="off">
+
+        <input type="text" id="answerInput" placeholder="Type your answer..." autocomplete="off">
         <br>
         <button onclick="checkAnswer()" id="btnAction">Next →</button>
         <p id="message"></p>
@@ -99,64 +289,210 @@
     let currentStep = 1;
 
     const challenge = [
-        { 
-            q: "Computer ko thand lag jaye toh kya karta hai??", 
-            a: "windows band kar leta hai" 
+        {
+            q: "Computer ko thand lag jaye toh kya karta hai??",
+            a: ["windows band kar leta hai", "closes windows", "close windows", "band kar leta hai",
+                "window band kar", "closes the windows", "shut windows", "shuts windows", "window close",
+                "closes his windows", "band", "windows", "window band", "close the window"],
+            keywords: ["window", "band", "close", "shut"]
         },
-        { 
-            q: "What can you only use when it breaks?", 
-            a: "eggs" 
+        {
+            q: "What can you only use when it breaks?",
+            a: ["eggs", "egg", "an egg", "the egg", "egss", "egs"],
+            keywords: ["egg"]
         },
-        { 
-            q: "What can you hold in your right hand, but not in your left hand?", 
-            a: "your left hand" 
+        {
+            q: "What can you hold in your right hand, but not in your left hand?",
+            a: ["your left hand", "left hand", "my left hand", "the left hand", "your left",
+                "my left", "left", "ur left hand", "youre left hand", "yor left hand"],
+            keywords: ["left", "hand"]
         }
     ];
 
-    const pdfUrl = "papa_comic_merged_final.pdf"; 
+    const pdfUrl = "papa_comic_merged_final.pdf";
 
-    // Function to switch from Landing Page to Quiz
+    // Create floating particles
+    function createParticles() {
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 6 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            particle.style.animationDelay = Math.random() * 6 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+            document.body.appendChild(particle);
+        }
+    }
+
+    // Create confetti explosion
+    function createConfetti() {
+        const colors = ['#ffd23f', '#ee4266', '#b185db', '#ff6b9d', '#dda0dd'];
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.3 + 's';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3000);
+        }
+    }
+
+    // Create floating emoji
+    function createEmojiFloat(emoji) {
+        const emojiEl = document.createElement('div');
+        emojiEl.className = 'emoji-float';
+        emojiEl.textContent = emoji;
+        emojiEl.style.left = Math.random() * 80 + 10 + '%';
+        emojiEl.style.top = '70%';
+        document.body.appendChild(emojiEl);
+        setTimeout(() => emojiEl.remove(), 2000);
+    }
+
     function startQuiz() {
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('quiz-area').style.display = 'block';
+        document.getElementById('answerInput').focus();
+    }
+
+    function updateProgress() {
+        const percentage = (currentStep / 3) * 100;
+        document.getElementById('progressFill').style.width = percentage + '%';
     }
 
     function checkAnswer() {
         const userInput = document.getElementById('answerInput').value.toLowerCase().trim();
         const msg = document.getElementById('message');
+        const container = document.querySelector('.container');
         const index = currentStep - 1;
 
-        if (userInput === challenge[index].a) {
+        // Advanced fuzzy matching
+        const normalizeText = (text) => text.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim();
+        const normalizedInput = normalizeText(userInput);
+
+        // Levenshtein distance for typo tolerance
+        function levenshtein(a, b) {
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 0; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j - 1] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j] + 1
+                        );
+                    }
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        // Check if input is close enough (allows typos)
+        function isSimilar(str1, str2, threshold = 0.7) {
+            const distance = levenshtein(str1, str2);
+            const maxLen = Math.max(str1.length, str2.length);
+            const similarity = 1 - (distance / maxLen);
+            return similarity >= threshold;
+        }
+
+        // Support multiple acceptable answers
+        const acceptableAnswers = Array.isArray(challenge[index].a) ? challenge[index].a : [challenge[index].a];
+        const keywords = challenge[index].keywords || [];
+
+        // Check if input matches any acceptable answer
+        let isCorrect = false;
+
+        // Method 1: Exact or partial match
+        isCorrect = acceptableAnswers.some(answer => {
+            const normalizedAnswer = normalizeText(answer);
+            return normalizedInput === normalizedAnswer ||
+                   normalizedInput.includes(normalizedAnswer) ||
+                   normalizedAnswer.includes(normalizedInput);
+        });
+
+        // Method 2: Similarity/typo tolerance
+        if (!isCorrect) {
+            isCorrect = acceptableAnswers.some(answer => {
+                const normalizedAnswer = normalizeText(answer);
+                return isSimilar(normalizedInput, normalizedAnswer, 0.65);
+            });
+        }
+
+        // Method 3: Keyword matching (if all keywords present)
+        if (!isCorrect && keywords.length > 0) {
+            const allKeywordsPresent = keywords.every(keyword =>
+                normalizedInput.includes(keyword.toLowerCase()) ||
+                normalizedInput.split(' ').some(word => isSimilar(word, keyword.toLowerCase(), 0.7))
+            );
+            if (allKeywordsPresent) {
+                isCorrect = true;
+            }
+        }
+
+        if (isCorrect && userInput.length > 2) {
+            // Correct answer
+            msg.style.color = "#ffd23f";
+            msg.className = 'correct';
+            createConfetti();
+            createEmojiFloat('🎉');
+            createEmojiFloat('✨');
+            createEmojiFloat('🎂');
+
             if (currentStep < 3) {
                 currentStep++;
-                msg.style.color = "#00ff00"; 
-                msg.innerHTML = "Correct! 🎂";
-                
+                msg.innerHTML = "🔥 Correct! 🔥";
+                updateProgress();
+
                 setTimeout(() => {
                     document.getElementById('stepIndicator').innerHTML = `Question ${currentStep} of 3`;
                     document.getElementById('questionTitle').innerHTML = `Joke #${currentStep}`;
                     document.getElementById('questionText').innerHTML = challenge[currentStep-1].q;
                     document.getElementById('answerInput').value = "";
+                    document.getElementById('answerInput').focus();
                     msg.innerHTML = "";
-                    if(currentStep === 3) document.getElementById('btnAction').innerHTML = "Unlock Gift 🎁";
-                }, 800);
+                    msg.className = '';
+                    if(currentStep === 3) {
+                        document.getElementById('btnAction').innerHTML = "🎁 Unlock Gift 🎁";
+                    }
+                }, 1200);
             } else {
-                msg.style.color = "#00ff00";
-                msg.innerHTML = "Success! Opening your gift...";
+                msg.innerHTML = "🎊 Champion! Opening your gift... 🎊";
+                createConfetti();
+                setTimeout(() => createConfetti(), 300);
+                setTimeout(() => createConfetti(), 600);
                 setTimeout(() => {
                     window.location.href = pdfUrl;
-                }, 1000);
+                }, 2000);
             }
         } else {
-            msg.style.color = "#ff3333";
-            msg.innerHTML = "Not quite! Try again. 🤔";
+            // Wrong answer
+            msg.style.color = "#ee4266";
+            msg.innerHTML = "❌ Not quite! Try again ❌";
+            container.classList.add('wrong');
+            setTimeout(() => container.classList.remove('wrong'), 400);
         }
     }
 
-    // Allow "Enter" key to submit
+    // Initialize particles on load
+    window.addEventListener('load', () => {
+        createParticles();
+    });
+
+    // Enter key to submit
     document.addEventListener("keyup", function(event) {
         if (event.key === "Enter") {
-            // Check which section is visible to decide what Enter does
             if (document.getElementById('start-screen').style.display !== 'none') {
                 startQuiz();
             } else {
